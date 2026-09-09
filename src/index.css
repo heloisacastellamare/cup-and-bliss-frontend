@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-marrom-escuro: #170202;
+  --color-marrom-claro: #280B0B;
+  --color-rosa-escuro: #EA7592;
+  --color-rosa-claro: #EFA2B5;
+  --color-off-white: #FFEDF1;
+  --color-vermelho: #9D0202;
+
+  --font-title: 'Italiana', serif;
+  --font-title-2: 'Inspiration', serif;
+  --font-corpo: 'Montserrat', serif;
+
+  --radius-custom: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-size: 36px;
+}
+
