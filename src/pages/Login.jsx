@@ -13,35 +13,30 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+
+    try {
     setError('')
     setLoading(true)
 
-    try {
       const response = await api.post('/auth/login', {
         email: email, senha: password
       })
 
-      const data = response.data
+     localStorage.setItem('@CupAndBliss:token', response.data.token)
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao realizar login')
-      }
-
-      const token = localStorage.getItem('@CupAndBliss:token')
-
-      localStorage.setItem('@CupAndBliss:user', JSON.stringify(response.data.usuario));
-
-      console.log('Login realizado com sucesso!');
-
-      if(data.usuario){
-        localStorage.setItem('user', JSON.stringify(data.usuario))
+      if (response.data.usuario) {
+        localStorage.setItem('@CupAndBliss:user', JSON.stringify(response.data.usuario))
       }
 
       limparCarrinho()
       navigate('/home')
+
     } catch (err) {
       const mensagem = err.response?.data?.error || 'Erro ao realizar login.'
       setError(mensagem)
+      console.error('Erro de login:', err.response?.data)
+      
     } finally {
       setLoading(false)
     }
