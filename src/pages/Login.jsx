@@ -43,11 +43,31 @@ export default function Login() {
     }
   }
 
+  const handleAcessoVisitante = () => {
+  // Limpa tokens antigos de usuários anteriores
+  localStorage.removeItem('@CupAndBliss:token')
+  localStorage.removeItem('@CupAndBliss:user')
+  
+  // Opcional: marca no storage que o usuário é um visitante
+  localStorage.setItem('@CupAndBliss:isGuest', 'true')
+  
+  // Redireciona diretamente para a Home
+  navigate('/home')
+}
+
+const handleAcaoRestrita = () => {
+  const isGuest = localStorage.getItem('@CupAndBliss:isGuest')
+  const token = localStorage.getItem('@CupAndBliss:token')
+
+  if (isGuest || !token) {
+    alert('Você precisa criar uma conta para realizar esta ação!')
+    navigate('/login')
+    return
+  }
+
   return (
     <div className="min-h-screen bg-marrom-escuro flex items-center justify-center">
       <div className="w-full max-w-sm">
-
-        
 
         <div className="flex justify-center">
             <img src={logoImg} alt="Cup and Bliss Logo" className="h-32"/>
@@ -117,6 +137,13 @@ export default function Login() {
             Cadastre-se
           </Link>
         </p>
+
+        <button
+            type="button"
+            onClick={handleAcessoVisitante}
+            className="w-full h-12 bg-rosa-escuro hover:bg-rosa-claro text-marrom-escuro font-corpo font-medium text-sm rounded-2xl transition duration-300 shadow-md hover:shadow-lg disabled:opacity-50 cursor-pointer" id="button"
+          > Continuar como visitante
+          </button>
       </div>
     </div>
   )
