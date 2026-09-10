@@ -139,12 +139,14 @@ const handleAcaoRestrita = () => {
           </Link>
         </p>
 
-        <button
-            type="button"
-            onClick={handleAcessoVisitante}
-            className="w-full h-12 bg-rosa-escuro hover:bg-rosa-claro text-marrom-escuro font-corpo font-medium text-sm rounded-2xl transition duration-300 shadow-md hover:shadow-lg disabled:opacity-50 cursor-pointer" id="button"
-          > Continuar como visitante
-          </button>
+        <div className="p-4">
+          <button
+              type="button"
+              onClick={handleAcessoVisitante}
+              className="w-full h-12 bg-rosa-escuro hover:bg-rosa-claro text-marrom-escuro font-corpo font-medium text-sm rounded-2xl transition duration-300 shadow-md hover:shadow-lg disabled:opacity-50 cursor-pointer" id="button"
+            > Continuar como visitante
+            </button>
+          </div>
       </div>
     </div>
   )
