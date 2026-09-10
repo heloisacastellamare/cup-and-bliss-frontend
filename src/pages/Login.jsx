@@ -18,7 +18,7 @@ export default function Login() {
 
     try {
       const response = await api.post('/auth/login', {
-        email, senha: password
+        email: email, senha: password
       })
 
       const data = response.data
@@ -27,7 +27,11 @@ export default function Login() {
         throw new Error(data.error || 'Erro ao realizar login')
       }
 
-      localStorage.setItem('token', data.token)
+      const token = localStorage.getItem('@CupAndBliss:token')
+
+      localStorage.setItem('@CupAndBliss:user', JSON.stringify(response.data.usuario));
+
+      console.log('Login realizado com sucesso!');
 
       if(data.usuario){
         localStorage.setItem('user', JSON.stringify(data.usuario))
@@ -36,7 +40,8 @@ export default function Login() {
       limparCarrinho()
       navigate('/home')
     } catch (err) {
-      setError(err.message)
+      const mensagem = err.response?.data?.error || 'Erro ao realizar login.'
+      setError(mensagem)
     } finally {
       setLoading(false)
     }
@@ -74,6 +79,7 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
+              style={{paddingLeft: '2.75rem'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
@@ -85,6 +91,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
               required
+              style={{paddingLeft: '2.75rem'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro outline-none text-xs font-corpo text-off-white"
             />
           </div>
