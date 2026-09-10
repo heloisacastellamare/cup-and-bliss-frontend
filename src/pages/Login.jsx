@@ -139,7 +139,7 @@ const handleAcaoRestrita = () => {
           </Link>
         </p>
 
-        <div className="p-4">
+        <div className="p-4.5">
           <button
               type="button"
               onClick={handleAcessoVisitante}
