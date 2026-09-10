@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import logoImg from '../assets/cupcake.logo.png'
 
 export default function Register() {
   const [nome, setNome] = useState('')
@@ -51,7 +52,7 @@ export default function Register() {
 
         {/* Cabeçalho */}
         <div className="flex justify-center mt-2.5">
-            <img src="src\assets\cupcake.logo.png" className="h-32"/>
+            <img src={logoImg} alt="Cup and Bliss Logo" className="h-32"/>
         </div>
         
         <div className="text-center space-y-3 mb-1">

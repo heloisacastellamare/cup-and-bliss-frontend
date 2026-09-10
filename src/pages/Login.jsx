@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import api from '../services/api'
+import logoImg from '../assets/cupcake.logo.png'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -36,7 +37,7 @@ export default function Login() {
       const mensagem = err.response?.data?.error || 'Erro ao realizar login.'
       setError(mensagem)
       console.error('Erro de login:', err.response?.data)
-      
+
     } finally {
       setLoading(false)
     }
@@ -49,7 +50,7 @@ export default function Login() {
         
 
         <div className="flex justify-center">
-            <img src="src\assets\cupcake.logo.png" className="h-32"/>
+            <img src={logoImg} alt="Cup and Bliss Logo" className="h-32"/>
         </div>
         
         {/* Cabeçalho */}
