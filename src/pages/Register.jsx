@@ -72,7 +72,7 @@ export default function Register() {
               onChange={(e) => setNome(e.target.value)}
               placeholder="Seu Nome"
               required
-              style={{paddingLeft: '2.75rem'}}
+              style={{paddingLeft: '16px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
@@ -84,7 +84,7 @@ export default function Register() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="seu@email.com"
               required
-              style={{paddingLeft: '2.75rem'}}
+              style={{paddingLeft: '16px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
@@ -96,7 +96,7 @@ export default function Register() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
               required
-              style={{paddingLeft: '2.75rem'}}
+              style={{paddingLeft: '16px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
@@ -109,7 +109,7 @@ export default function Register() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirme sua senha"
               required
-              style={{paddingLeft: '2.75rem'}}
+              style={{paddingLeft: '16px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
