@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
+import api from '../services/api'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -16,13 +17,11 @@ export default function Login() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, senha: password }),
+      const response = await api.post('/auth/login', {
+        email, senha: password
       })
 
-      const data = await response.json()
+      const data = response.data
 
       if (!response.ok) {
         throw new Error(data.error || 'Erro ao realizar login')

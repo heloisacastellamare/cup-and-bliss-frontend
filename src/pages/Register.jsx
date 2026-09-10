@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import api from '../services/api'
 
 export default function Register() {
   const [nome, setNome] = useState('')
@@ -22,13 +23,11 @@ export default function Register() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, email, senha: password }),
+      const response = await api.post('/auth/register', {
+        nome, email, senha: password 
       })
 
-      const data = await response.json()
+      const data = response.data
 
       if (!response.ok) {
         throw new Error(data.error || 'Erro ao realizar cadastro')
