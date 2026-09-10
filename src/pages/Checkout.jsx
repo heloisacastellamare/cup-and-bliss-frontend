@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import api from '../services/api'
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -16,22 +17,28 @@ export default function Checkout() {
   const subtotal = valorTotal;
   const total = subtotal;
 
-  const getToken = () => localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token');
-
   useEffect(() => {
-    const token = getToken();
-    if (!token) return;
+    const token = localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token')
+    const isGuest = localStorage.getItem('CupAndBliss:isGuest')
 
-    fetch('http://localhost:5000/api/auth/me', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Não foi possível carregar o endereço.');
-        setEndereco(data.endereco || '');
-      })
-      .catch((error) => setErro(error.message));
-  }, []);
+    if (!token || isGuest === 'true'){
+      localStorage.setItem('@CupAndBliss:redirectTo', '/checkout')
+      alert ('Para finalizar sua compra, faça login ou cadastre-se no Cup and Bliss!')
+      navigate('/cadastro')
+      return
+    }
+
+    async function carregarPerfil() {
+      try {
+        const response = await api.get('/auth/me');
+        setEndereco(response.data.endereco || '');
+      } catch (error) {
+        setErro(error.response?.data?.error || 'Não foi possível carregar o endereço.');
+      }
+    }
+
+    carregarPerfil();
+  }, [navigate]);
 
   const handlePagar = async () => {
     setErro('');
@@ -44,52 +51,33 @@ export default function Checkout() {
     setProcessando(true);
 
     try {
-      const token = getToken();
-      if (!token) throw new Error('Faça login para finalizar o pedido.');
+      const token = localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token');
+      if (!token) {
+        localStorage.setItem('@CupAndBliss:redirectTo', '/checkout');
+        navigate('/cadastro');
+        return;
+      }
 
-      const enderecoResponse = await fetch('http://localhost:5000/api/auth/me', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ endereco: endereco.trim() }),
+      await api.put('/auth/update', { 
+        endereco: endereco.trim() 
       });
 
-      const enderecoData = await enderecoResponse.json();
-      if (!enderecoResponse.ok) {
-        throw new Error(enderecoData.error || 'Não foi possível salvar o endereço.');
-      }
-
-      const response = await fetch('http://localhost:5000/api/pedidos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          itens: carrinho.map((item) => ({
-            produto_id: item.id,
-            quantidade: item.quantidade,
-          })),
-          forma_pagamento: pagamento,
-        }),
+      // 2. Envia o pedido para o backend
+      const response = await api.post('/pedidos', {
+        itens: carrinho.map((item) => ({
+          produto_id: item.id,
+          quantidade: item.quantidade,
+        })),
+        forma_pagamento: pagamento,
       });
 
-      const data = await response.json();
-      if (response.status === 401) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      }
-      if (!response.ok) {
-        throw new Error(data.detalhes || data.error || 'Não foi possível finalizar o pedido.');
-      }
+      const data = response.data;
 
       const dadosPedido = {
-        id: `#${data.pedido_id}`,
+        id: `#${data.pedido_id || data.id}`,
         endereco: endereco.trim(),
         itens: carrinho,
-        total: Number(data.valor_total).toLocaleString('pt-BR', {
+        total: Number(data.valor_total || total).toLocaleString('pt-BR', {
           style: 'currency',
           currency: 'BRL',
         }),
@@ -98,8 +86,19 @@ export default function Checkout() {
 
       limparCarrinho();
       navigate('/pedido-concluido', { state: { pedido: dadosPedido } });
+
     } catch (error) {
-      setErro(error.message);
+      if (error.response?.status === 401) {
+        localStorage.removeItem('@CupAndBliss:token');
+        localStorage.removeItem('@CupAndBliss:user');
+        localStorage.setItem('@CupAndBliss:redirectTo', '/checkout');
+        alert('Sua sessão expirou. Por favor, faça login novamente.');
+        navigate('/login');
+        return;
+      }
+
+      const mensagemErro = error.response?.data?.detalhes || error.response?.data?.error || error.message || 'Não foi possível finalizar o pedido.';
+      setErro(mensagemErro);
     } finally {
       setProcessando(false);
     }
