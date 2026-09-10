@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import { Search, Sparkles, Plus, Star, Flame, X, CheckCircle, Check} from 'lucide-react'
 import { useCart } from '../contexts/CartContext'
+import api from '../services/api'
 
 export default function Home({ onSelecionarProduto }) {
   const [busca, setBusca] = useState('');
@@ -10,6 +11,7 @@ export default function Home({ onSelecionarProduto }) {
   const [notificacao, setNotificacao] = useState(null);
   const [produtos, setProdutos] = useState([]);
   const [doceDoDia, setDoceDoDia] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate()
 
@@ -32,20 +34,21 @@ export default function Home({ onSelecionarProduto }) {
     });
 
     Promise.all([
-      fetch('http://localhost:5000/api/produtos'),
-      fetch('http://localhost:5000/api/produtos/doce-do-dia'),
+      api.get('/produtos'),
+      api.get('/produtos/doce-do-dia')
     ])
       .then(async ([produtosResponse, doceResponse]) => {
-        if (!produtosResponse.ok || !doceResponse.ok) {
-          throw new Error('Não foi possível carregar o cardápio.');
-        }
 
-        const produtosData = await produtosResponse.json();
-        const doceData = await doceResponse.json();
-        setProdutos(produtosData.map(adaptarProduto));
-        setDoceDoDia(adaptarProduto(doceData));
+        setProdutos(produtosResponse.data.map(adaptarProduto))
+
+        if (doceResponse.data) {
+          setDoceDoDia(adaptarProduto(doceResponse.data))
+        }
       })
-      .catch((error) => setNotificacao(error.message));
+      .catch((error) => {
+        const mensagem = error.response?.data?.error || 'Não foi possível carregar o cardápio';
+        setNotificacao(error.message)
+      })
   }, []);
 
   // Filtro corrigido por Categoria e Busca
