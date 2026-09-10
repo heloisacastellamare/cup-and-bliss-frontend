@@ -79,7 +79,7 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
-              style={{paddingLeft: '16px'}}
+              style={{paddingLeft: '18px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
@@ -91,7 +91,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
               required
-              style={{paddingLeft: '16px'}}
+              style={{paddingLeft: '18px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro outline-none text-xs font-corpo text-off-white"
             />
           </div>

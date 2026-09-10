@@ -23,20 +23,21 @@ export default function Register() {
     setLoading(true)
 
     try {
+      setLoading(true);
+      setError('')
+
       const response = await api.post('/auth/register', {
         nome, email, senha: password 
       })
 
       const data = response.data
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao realizar cadastro')
-      }
-
+      alert('Cadastro realizado com sucesso!');
       navigate('/login')
+
     } catch (err) {
-      console.error("ERRO AO CADASTRAR", err)
-      setError(err.message)
+      const mensagem = err.response?.data?.error || 'Erro ao realizar cadastro.'
+      setError(mensagem)
+      console.error('Detalhes do erro 400:', err.response?.data)
     } finally {
       setLoading(false)
     }
@@ -72,7 +73,7 @@ export default function Register() {
               onChange={(e) => setNome(e.target.value)}
               placeholder="Seu Nome"
               required
-              style={{paddingLeft: '16px'}}
+              style={{paddingLeft: '18px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
@@ -84,7 +85,7 @@ export default function Register() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="seu@email.com"
               required
-              style={{paddingLeft: '16px'}}
+              style={{paddingLeft: '18px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
@@ -96,7 +97,7 @@ export default function Register() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
               required
-              style={{paddingLeft: '16px'}}
+              style={{paddingLeft: '18px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
@@ -109,7 +110,7 @@ export default function Register() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirme sua senha"
               required
-              style={{paddingLeft: '16px'}}
+              style={{paddingLeft: '18px'}}
               className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
             />
           </div>
