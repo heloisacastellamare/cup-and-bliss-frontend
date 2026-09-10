@@ -30,7 +30,10 @@ export default function Login() {
         localStorage.setItem('@CupAndBliss:user', JSON.stringify(response.data.usuario))
       }
 
-      limparCarrinho()
+      localStorage.setItem('@CupAndBliss:token', response.data.token);
+      localStorage.setItem('@CupAndBliss:user', JSON.stringify(response.data.usuario));
+
+      limparCarrinho(); 
       navigate('/home')
 
     } catch (err) {

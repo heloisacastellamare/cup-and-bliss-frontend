@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
-
-
 import {
   MapPin,
   ShoppingBag, 
@@ -37,47 +35,59 @@ export default function Profile() {
         enderecoPrincipal: 'Endereço não informado',
       };
     }
-  });
+  })
+
   const [editando, setEditando] = useState(false);
   const [salvando, setSalvando] = useState(false);
   const [erroPerfil, setErroPerfil] = useState('');
   const [sucessoPerfil, setSucessoPerfil] = useState('');
-
   const [pedidosRecentes, setPedidosRecentes] = useState([]);
 
+  const handleLogout = () => {
+      limparCarrinho();
+      localStorage.removeItem('@CupAndBliss:user');
+      localStorage.removeItem('@CupAndBliss:token');
+      localStorage.removeItem('@CupAndBliss:isGuest');
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      navigate('/login');
+    }
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token');
+    const isGuest = localStorage.getItem('@CupAndBliss:isGuest');
 
-    if (!token) return;
+    if (!token || isGuest === 'true'){
+      navigate('/login') 
+      return;
+}
 
-    fetch('http://localhost:5000/api/auth/me', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Não foi possível carregar o perfil.');
+    api.get('/auth/me')
+      .then((response) => {
+        const data = response.data;
         setUsuario({
           nome: data.nome || 'Cliente',
           email: data.email || 'E-mail não informado',
           telefone: data.telefone || '',
           enderecoPrincipal: data.endereco || '',
         });
-        localStorage.setItem('user', JSON.stringify(data));
+        localStorage.setItem('@CupAndBliss:user', JSON.stringify(data));
       })
-      .catch((error) => setErroPerfil(error.message));
+      .catch((error) => {
+        if (error.response?.status === 401) {
+          handleLogout();
+        } else {
+          setErroPerfil(error.response?.data?.error || 'Não foi possível carregar o perfil.');
+        }
+      });
 
-    fetch('http://localhost:5000/api/pedidos', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    // Busca os pedidos do usuário
+    api.get('/pedidos')
       .then((response) => {
-        if (!response.ok) throw new Error('Não foi possível buscar os pedidos.');
-        return response.json();
+        setPedidosRecentes(response.data.slice(0, 1));
       })
-      .then((pedidos) => setPedidosRecentes(pedidos.slice(0, 1)))
       .catch((error) => console.error('Erro ao buscar pedidos do usuário:', error));
-  }, []);
+  }, [navigate]);
 
   const atualizarCampo = (campo, valor) => {
     setUsuario((atual) => ({ ...atual, [campo]: valor }));
@@ -90,46 +100,33 @@ export default function Profile() {
     setSalvando(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/me', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          nome: usuario.nome,
-          email: usuario.email,
-          telefone: usuario.telefone,
-          endereco: usuario.enderecoPrincipal,
-        }),
+      const response = await api.put('/auth/update', {
+        nome: usuario.nome,
+        email: usuario.email,
+        telefone: usuario.telefone,
+        endereco: usuario.enderecoPrincipal,
       });
-      const data = await response.json();
 
-      if (!response.ok) throw new Error(data.error || 'Não foi possível atualizar o perfil.');
+      const data = response.data;
 
-      const usuarioAtualizado = {
+      setUsuario({
         nome: data.nome,
         email: data.email,
         telefone: data.telefone || '',
         enderecoPrincipal: data.endereco || '',
-      };
-      setUsuario(usuarioAtualizado);
-      localStorage.setItem('user', JSON.stringify(data));
+      });
+
+      localStorage.setItem('@CupAndBliss:user', JSON.stringify(data));
       setEditando(false);
       setSucessoPerfil('Dados atualizados com sucesso.');
     } catch (error) {
-      setErroPerfil(error.message);
+      setErroPerfil(error.response?.data?.error || error.message || 'Não foi possível atualizar o perfil.');
     } finally {
       setSalvando(false);
     }
   };
 
-  const handleLogout = () => {
-    limparCarrinho();
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+  
 
   return (
     <div className="min-h-screen bg-off-white pb-24 font-corpo">

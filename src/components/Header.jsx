@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { User, Bell, ChevronLeft } from 'lucide-react'
 import { useCart } from '../contexts/CartContext'
+import api from '../services/api'
+
+const userStored = localStorage.getItem('@CupAndBliss:user');
+const usuario = userStored ? JSON.parse(userStored) : null;
 
 export default function Header(){
     const [nomeUsuario, setNomeUsuario] = useState('Cliente')
@@ -26,7 +30,7 @@ export default function Header(){
                 {/*Boas vindas ao usuario*/}
                 <div className="flex gap-35 align-center">
                     <div>
-                        <p className="text-xl font-corpo text-rosa-escuro font-bold">Olá, {nomeUsuario}</p>
+                        <p className="text-xl font-corpo text-rosa-escuro font-bold"> {usuario ? `Olá, ${usuario.nome}` : 'Seja bem-vindo!'}</p>
                     </div>
                     <Link to="/profile" className="">
                         <User size={30} className="flex"/>

@@ -1,5 +1,22 @@
 import { createContext, useContext, useState, useEffect } from  'react'
 
+// Exemplo de função de Logout completa
+export const realizarLogout = (limparCarrinho, navigate) => {
+  // 1. Limpa todos os dados de autenticação e visitante
+  localStorage.removeItem('@CupAndBliss:token');
+  localStorage.removeItem('@CupAndBliss:user');
+  localStorage.removeItem('@CupAndBliss:isGuest');
+  localStorage.removeItem('carrinho'); // Ou a chave que guarda os itens do carrinho
+
+  // 2. Reseta o estado do carrinho no React Context
+  if (limparCarrinho) {
+    limparCarrinho();
+  }
+
+  // 3. Redireciona para o login
+  navigate('/login');
+};
+
 const CartContext = createContext()
 
 export function CartProvider({ children }) {
