@@ -64,6 +64,7 @@ const handleAcaoRestrita = () => {
     navigate('/login')
     return
   }
+}
 
   return (
     <div className="min-h-screen bg-marrom-escuro flex items-center justify-center">
