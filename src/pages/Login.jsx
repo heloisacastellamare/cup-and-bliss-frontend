@@ -28,6 +28,7 @@ export default function Login() {
       })
 
      localStorage.setItem('@CupAndBliss:token', response.data.token)
+    localStorage.removeItem('@CupAndBliss:isGuest')
 
       if (response.data.usuario) {
         localStorage.setItem('@CupAndBliss:user', JSON.stringify(response.data.usuario))

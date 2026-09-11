@@ -1,28 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { User, Bell, ChevronLeft } from 'lucide-react'
-import { useCart } from '../contexts/CartContext'
-import api from '../services/api'
-
-const userStored = localStorage.getItem('@CupAndBliss:user');
-const usuario = userStored ? JSON.parse(userStored) : null;
+import { User } from 'lucide-react'
 
 export default function Header(){
-    const [nomeUsuario, setNomeUsuario] = useState('Cliente')
-
-    useEffect(() => {
-        const userStorage = localStorage.getItem('user')
-
-        if(userStorage){
-            try {
-                const user = JSON.parse(userStorage)
-                const primeiroNome = user.nome ? user.nome.split(' ')[0] : 'Cliente'
-                setNomeUsuario(primeiroNome)
-            } catch (error) {
-                console.error('Erro ao ler dados do usuário:', error)
-            }
+    const [usuario] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem('@CupAndBliss:user') || 'null')
+        } catch {
+            return null
         }
-    }, [])
+    })
 
     return (
         <header className="fixed top-0 left-0 right-0 z-40 bg-marrom-escuro rounded-b-2xl h-16">

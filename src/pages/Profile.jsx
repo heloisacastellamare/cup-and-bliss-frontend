@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import api from '../services/api';
+import { getFriendlyErrorMessage } from '../utils/friendlyErrors';
 import {
   MapPin,
   ShoppingBag, 
@@ -19,7 +21,7 @@ export default function Profile() {
 
   const [usuario, setUsuario] = useState(() => {
     try {
-      const usuarioLogado = JSON.parse(localStorage.getItem('user') || 'null');
+      const usuarioLogado = JSON.parse(localStorage.getItem('@CupAndBliss:user') || 'null');
 
       return {
         nome: usuarioLogado?.nome || 'Cliente',
@@ -55,9 +57,7 @@ export default function Profile() {
 
   useEffect(() => {
     const token = localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token');
-    const isGuest = localStorage.getItem('@CupAndBliss:isGuest');
-
-    if (!token || isGuest === 'true'){
+    if (!token){
       navigate('/login') 
       return;
 }
@@ -77,7 +77,7 @@ export default function Profile() {
         if (error.response?.status === 401) {
           handleLogout();
         } else {
-          setErroPerfil(error.response?.data?.error || 'Não foi possível carregar o perfil.');
+          setErroPerfil(getFriendlyErrorMessage(error));
         }
       });
 
@@ -100,7 +100,7 @@ export default function Profile() {
     setSalvando(true);
 
     try {
-      const response = await api.put('/auth/update', {
+      const response = await api.patch('/auth/me', {
         nome: usuario.nome,
         email: usuario.email,
         telefone: usuario.telefone,
@@ -120,7 +120,7 @@ export default function Profile() {
       setEditando(false);
       setSucessoPerfil('Dados atualizados com sucesso.');
     } catch (error) {
-      setErroPerfil(error.response?.data?.error || error.message || 'Não foi possível atualizar o perfil.');
+      setErroPerfil(getFriendlyErrorMessage(error));
     } finally {
       setSalvando(false);
     }

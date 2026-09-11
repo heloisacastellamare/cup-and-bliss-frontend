@@ -15,19 +15,19 @@ export default function Checkout() {
   const [cupom, setCupom] = useState('');
   const [erro, setErro] = useState('');
   const [processando, setProcessando] = useState(false);
+  const [acessoRestrito, setAcessoRestrito] = useState(() => {
+    const token = localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token')
+    const isGuest = localStorage.getItem('CupAndBliss:isGuest')
+    return !token || (isGuest === 'true' && !token)
+  });
 
   const subtotal = valorTotal;
   const total = subtotal;
 
   useEffect(() => {
     const token = localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token')
-    const isGuest = localStorage.getItem('CupAndBliss:isGuest')
-
-    if (!token || isGuest === 'true'){
+    if (!token){
       localStorage.setItem('@CupAndBliss:redirectTo', '/checkout')
-      navigate('/cadastro', {
-        state: { mensagem: 'Para finalizar sua compra, faça login ou cadastre-se no Cup and Bliss.' },
-      })
       return
     }
 
@@ -57,13 +57,13 @@ export default function Checkout() {
       const token = localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token');
       if (!token) {
         localStorage.setItem('@CupAndBliss:redirectTo', '/checkout');
-        navigate('/cadastro', {
+        navigate('/register', {
           state: { mensagem: 'Para finalizar sua compra, faça login ou cadastre-se no Cup and Bliss.' },
         });
         return;
       }
 
-      await api.put('/auth/update', { 
+      await api.patch('/auth/me', {
         endereco: endereco.trim() 
       });
 
@@ -127,6 +127,30 @@ export default function Checkout() {
 
         
 
+        {acessoRestrito ? (
+          <div className="space-y-5 pt-8">
+            <ErrorMessage
+              message="Para finalizar sua compra, você precisa ter um cadastro no Cup and Bliss."
+              onClose={() => setAcessoRestrito(false)}
+            />
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="w-full border border-rosa-escuro text-rosa-escuro font-bold py-4 rounded-3xl transition active:scale-95"
+              >
+                Voltar
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/register')}
+                className="w-full bg-rosa-escuro text-white font-bold py-4 rounded-3xl shadow-lg transition active:scale-95"
+              >
+                Fazer cadastro
+              </button>
+            </div>
+          </div>
+        ) : (
         <div className="space-y-5">
         
             <div>
@@ -217,10 +241,11 @@ export default function Checkout() {
             </div>
           </div>
         </div>
+        )}
       </div>
 
       {/* BOTÃO PAGAR */}
-      <div className="pt-6">
+      {!acessoRestrito && <div className="pt-6">
         <button
           onClick={handlePagar}
           disabled={processando || carrinho.length === 0}
@@ -228,7 +253,7 @@ export default function Checkout() {
         >
           {processando ? 'Processando...' : 'Pagar'}
         </button>
-      </div>
+      </div>}
       </div>
     </div>
   );
