@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import api from '../services/api'
 import logoImg from '../assets/cupcake.logo.png'
+import { ErrorMessage } from '../components/ErrorMessage'
 import { getFriendlyErrorMessage } from '../utils/friendlyErrors'
 
 export default function Login() {
