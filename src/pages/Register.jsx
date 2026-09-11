@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import logoImg from '../assets/cupcake.logo.png'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { getFriendlyErrorMessage } from '../utils/friendlyErrors'
 
 export default function Register() {
   const [nome, setNome] = useState('')
@@ -34,13 +36,11 @@ export default function Register() {
       })
 
       const data = response.data
-      alert('Cadastro realizado com sucesso!');
+      setError(getFriendlyErrorMessage(error))
       navigate('/login')
 
     } catch (err) {
-      const mensagem = err.response?.data?.error || 'Erro ao realizar cadastro.'
-      setError(mensagem)
-      console.error('Detalhes do erro 400:', err.response?.data)
+      setError(getFriendlyErrorMessage(error))
     } finally {
       setLoading(false)
     }
@@ -60,12 +60,7 @@ export default function Register() {
           <p className="text-sm font-corpo text-rosa-claro font-semibold">Crie sua conta</p>
         </div>
 
-        {/* Alerta de Erro */}
-        {error && (
-          <div className=" bg-vermelho text-off-white text-sm h-15  text-center flex items-center justify-center font-corpo font-medium rounded-2xl">
-            {error}
-          </div>
-        )}
+        <ErrorMessage message={error} onClose={() => setError('')} />
 
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-6 gap-10 p-6">
@@ -77,7 +72,7 @@ export default function Register() {
               placeholder="Seu Nome"
               required
               style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
+              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
@@ -89,7 +84,7 @@ export default function Register() {
               placeholder="seu@email.com"
               required
               style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
+              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
@@ -101,7 +96,7 @@ export default function Register() {
               placeholder="Senha"
               required
               style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
+              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
@@ -114,7 +109,7 @@ export default function Register() {
               placeholder="Confirme sua senha"
               required
               style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
+              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 

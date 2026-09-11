@@ -72,7 +72,7 @@ const handleAcaoRestrita = () => {
     <div className="min-h-screen bg-marrom-escuro flex items-center justify-center">
       
       <div className="w-full max-w-sm">
-        <ErrorMessage message={error} onClose={() => setError('')} />
+       
         <div className="flex justify-center">
             <img src={logoImg} alt="Cup and Bliss Logo" className="h-32"/>
         </div>
@@ -83,7 +83,7 @@ const handleAcaoRestrita = () => {
           <p className="text-sm font-corpo text-rosa-claro font-semibold">Bem-vindo de volta! Acesse sua conta.</p>
         </div>
 
-
+        <ErrorMessage message={error} onClose={() => setError('')} />
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-6 gap-10 p-6">
           <div className="email">
@@ -93,8 +93,7 @@ const handleAcaoRestrita = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
-              style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white"
+              className="w-full h-12 px-5 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
@@ -106,7 +105,7 @@ const handleAcaoRestrita = () => {
               placeholder="Senha"
               required
               style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro outline-none text-xs font-corpo text-off-white"
+              className="w-full h-12 rounded-2xl bg-marrom-claro outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition""
             />
           </div>
 

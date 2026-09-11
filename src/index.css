@@ -24,3 +24,7 @@ h1 {
   font-size: 36px;
 }
 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  filter: invert(1);
+}
