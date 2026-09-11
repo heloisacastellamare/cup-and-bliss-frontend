@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import api from '../services/api'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { getFriendlyErrorMessage } from '../utils/friendlyErrors'
 
 export default function Checkout() {
   const navigate = useNavigate();
