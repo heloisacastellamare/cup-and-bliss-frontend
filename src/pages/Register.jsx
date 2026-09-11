@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import logoImg from '../assets/cupcake.logo.png'
 import { ErrorMessage } from '../components/ErrorMessage'
@@ -10,7 +10,8 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
+  const location = useLocation()
+  const [error, setError] = useState(location.state?.mensagem || '')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -29,18 +30,16 @@ export default function Register() {
       setLoading(true);
       setError('')
 
-      const response = await api.post('/auth/register', {
+      await api.post('/auth/register', {
         nome, 
         email, 
         senha: password
       })
 
-      const data = response.data
-      setError(getFriendlyErrorMessage(error))
       navigate('/login')
 
     } catch (err) {
-      setError(getFriendlyErrorMessage(error))
+      setError(getFriendlyErrorMessage(err))
     } finally {
       setLoading(false)
     }

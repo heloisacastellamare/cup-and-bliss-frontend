@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import api from '../services/api'
 import logoImg from '../assets/cupcake.logo.png'
@@ -12,6 +12,7 @@ export default function Login() {
   const [error, setErro] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
   const { limparCarrinho } = useCart()
 
   const handleSubmit = async (e) => {
@@ -39,7 +40,7 @@ export default function Login() {
       navigate('/home')
 
     } catch (err) {
-      setErro(getFriendlyErrorMessage(error))
+      setErro(getFriendlyErrorMessage(err))
 
     } finally {
       setLoading(false)
@@ -58,17 +59,6 @@ export default function Login() {
   navigate('/home')
 }
 
-const handleAcaoRestrita = () => {
-  const isGuest = localStorage.getItem('@CupAndBliss:isGuest')
-  const token = localStorage.getItem('@CupAndBliss:token')
-
-  if (isGuest || !token) {
-    setErro(getFriendlyErrorMessage(error))
-    navigate('/login')
-    return
-  }
-}
-
   return (
     <div className="min-h-screen bg-marrom-escuro flex items-center justify-center">
       
@@ -84,7 +74,7 @@ const handleAcaoRestrita = () => {
           <p className="text-sm font-corpo text-rosa-claro font-semibold">Bem-vindo de volta! Acesse sua conta.</p>
         </div>
 
-        <ErrorMessage message={error} onClose={() => setErro('')} />
+        <ErrorMessage message={location.state?.mensagem || error} onClose={() => setErro('')} />
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-6 gap-10 p-6">
           <div className="email">

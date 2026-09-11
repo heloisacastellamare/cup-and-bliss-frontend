@@ -25,8 +25,9 @@ export default function Checkout() {
 
     if (!token || isGuest === 'true'){
       localStorage.setItem('@CupAndBliss:redirectTo', '/checkout')
-      alert ('Para finalizar sua compra, faça login ou cadastre-se no Cup and Bliss!')
-      navigate('/cadastro')
+      navigate('/cadastro', {
+        state: { mensagem: 'Para finalizar sua compra, faça login ou cadastre-se no Cup and Bliss.' },
+      })
       return
     }
 
@@ -35,7 +36,7 @@ export default function Checkout() {
         const response = await api.get('/auth/me');
         setEndereco(response.data.endereco || '');
       } catch (error) {
-        setErro(error.response?.data?.error || 'Não foi possível carregar o endereço.');
+        setErro(getFriendlyErrorMessage(error));
       }
     }
 
@@ -56,7 +57,9 @@ export default function Checkout() {
       const token = localStorage.getItem('@CupAndBliss:token') || localStorage.getItem('token');
       if (!token) {
         localStorage.setItem('@CupAndBliss:redirectTo', '/checkout');
-        navigate('/cadastro');
+        navigate('/cadastro', {
+          state: { mensagem: 'Para finalizar sua compra, faça login ou cadastre-se no Cup and Bliss.' },
+        });
         return;
       }
 
@@ -99,8 +102,7 @@ export default function Checkout() {
         return;
       }
 
-      const mensagemErro = error.response?.data?.detalhes || error.response?.data?.error || error.message || 'Não foi possível finalizar o pedido.';
-      setErro(mensagemErro);
+      setErro(getFriendlyErrorMessage(error));
     } finally {
       setProcessando(false);
     }
