@@ -71,8 +71,7 @@ export default function Register() {
               onChange={(e) => setNome(e.target.value)}
               placeholder="Seu Nome"
               required
-              style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
+              className="w-full px-5 h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white border focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
@@ -83,8 +82,7 @@ export default function Register() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="seu@email.com"
               required
-              style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
+              className="w-full px-5 h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white border focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
@@ -95,8 +93,7 @@ export default function Register() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
               required
-              style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
+              className="w-full px-5 h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white border focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
@@ -108,8 +105,7 @@ export default function Register() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirme sua senha"
               required
-              style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
+              className="w-full px-5 h-12 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white border focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 

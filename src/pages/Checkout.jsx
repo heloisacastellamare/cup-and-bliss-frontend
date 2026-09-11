@@ -92,7 +92,7 @@ export default function Checkout() {
         localStorage.removeItem('@CupAndBliss:token');
         localStorage.removeItem('@CupAndBliss:user');
         localStorage.setItem('@CupAndBliss:redirectTo', '/checkout');
-        alert('Sua sessão expirou. Por favor, faça login novamente.');
+        setErro(getFriendlyErrorMessage(error))
         navigate('/login');
         return;
       }
@@ -121,12 +121,13 @@ export default function Checkout() {
           </h2>
         </div>
 
+        
+
         <div className="space-y-5">
-          {erro && (
-            <div className="bg-vermelho text-off-white text-xs font-semibold p-3 rounded-2xl">
-              {erro}
+        
+            <div>
+             <ErrorMessage message={erro} onClose={() => setErro('')} />
             </div>
-          )}
 
           {/* ENVIAR PARA */}
           <div className="space-y-1.5">

@@ -12,6 +12,8 @@ import {
   CheckCircle2, 
   Clock 
 } from 'lucide-react';
+import { ErrorMessage } from '../components/ErrorMessage'
+import { getFriendlyErrorMessage } from '../utils/friendlyErrors'
 
 export default function Profile() {
   const navigate = useNavigate();

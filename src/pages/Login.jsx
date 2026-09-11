@@ -9,16 +9,17 @@ import { getFriendlyErrorMessage } from '../utils/friendlyErrors'
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [error, setErro] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { limparCarrinho } = useCart()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+    setErro('')
+
     try {
-    setError('')
+    
     setLoading(true)
 
       const response = await api.post('/auth/login', {
@@ -38,7 +39,7 @@ export default function Login() {
       navigate('/home')
 
     } catch (err) {
-      setError(getFriendlyErrorMessage(error))
+      setErro(getFriendlyErrorMessage(error))
 
     } finally {
       setLoading(false)
@@ -62,7 +63,7 @@ const handleAcaoRestrita = () => {
   const token = localStorage.getItem('@CupAndBliss:token')
 
   if (isGuest || !token) {
-    setError(getFriendlyErrorMessage(error))
+    setErro(getFriendlyErrorMessage(error))
     navigate('/login')
     return
   }
@@ -83,7 +84,7 @@ const handleAcaoRestrita = () => {
           <p className="text-sm font-corpo text-rosa-claro font-semibold">Bem-vindo de volta! Acesse sua conta.</p>
         </div>
 
-        <ErrorMessage message={error} onClose={() => setError('')} />
+        <ErrorMessage message={error} onClose={() => setErro('')} />
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-6 gap-10 p-6">
           <div className="email">
@@ -93,7 +94,7 @@ const handleAcaoRestrita = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
-              className="w-full h-12 px-5 rounded-2xl bg-marrom-claro  outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
+              className="w-full h-12 px-5 rounded-2xl bg-marrom-claro outline-none text-xs font-corpo text-off-white border focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
@@ -104,8 +105,7 @@ const handleAcaoRestrita = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Senha"
               required
-              style={{paddingLeft: '18px'}}
-              className="w-full h-12 rounded-2xl bg-marrom-claro outline-none text-xs font-corpo text-off-white focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition""
+              className="w-full px-5 h-12 rounded-2xl bg-marrom-claro outline-none text-xs font-corpo text-off-white border focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition"
             />
           </div>
 
