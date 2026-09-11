@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import api from '../services/api'
 import logoImg from '../assets/cupcake.logo.png'
+import { getFriendlyErrorMessage } from '../utils/friendlyErrors'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -15,7 +16,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-
     try {
     setError('')
     setLoading(true)
@@ -37,9 +37,7 @@ export default function Login() {
       navigate('/home')
 
     } catch (err) {
-      const mensagem = err.response?.data?.error || 'Erro ao realizar login.'
-      setError(mensagem)
-      console.error('Erro de login:', err.response?.data)
+      setError(getFriendlyErrorMessage(error))
 
     } finally {
       setLoading(false)
@@ -63,7 +61,7 @@ const handleAcaoRestrita = () => {
   const token = localStorage.getItem('@CupAndBliss:token')
 
   if (isGuest || !token) {
-    alert('Você precisa criar uma conta para realizar esta ação!')
+    setError(getFriendlyErrorMessage(error))
     navigate('/login')
     return
   }
@@ -71,6 +69,7 @@ const handleAcaoRestrita = () => {
 
   return (
     <div className="min-h-screen bg-marrom-escuro flex items-center justify-center">
+      <ErrorMessage message={error} onClose={() => setErro('')} />
       <div className="w-full max-w-sm">
 
         <div className="flex justify-center">
