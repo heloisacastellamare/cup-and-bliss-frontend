@@ -70,9 +70,9 @@ const handleAcaoRestrita = () => {
 
   return (
     <div className="min-h-screen bg-marrom-escuro flex items-center justify-center">
-      <ErrorMessage message={error} onClose={() => setErro('')} />
+      
       <div className="w-full max-w-sm">
-
+        <ErrorMessage message={error} onClose={() => setError('')} />
         <div className="flex justify-center">
             <img src={logoImg} alt="Cup and Bliss Logo" className="h-32"/>
         </div>
@@ -83,12 +83,6 @@ const handleAcaoRestrita = () => {
           <p className="text-sm font-corpo text-rosa-claro font-semibold">Bem-vindo de volta! Acesse sua conta.</p>
         </div>
 
-         {/* Alerta de Erro */}
-        {error && (
-            <div className="bg-vermelho text-off-white text-sm h-15  text-center flex items-center justify-center font-corpo font-medium rounded-2xl">
-            {error}
-            </div>
-        )}
 
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-6 gap-10 p-6">

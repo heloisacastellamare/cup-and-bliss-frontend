@@ -5,21 +5,9 @@ export function ErrorMessage({ message, onClose }) {
 
   return (
     <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        backgroundColor: '#FDF2F2', // Vermelho/Rosa suave
-        border: '1px solid #FDE8E8',
-        color: '#9B1C1C',
-        padding: '12px 16px',
-        borderRadius: '8px',
-        margin: '12px 0',
-        fontSize: '14px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-      }}
+      className="bg-vermelho text-off-white text-sm h-15  text-center flex items-center justify-center font-corpo font-medium rounded-2xl"
     >
-      <AlertCircle size={20} color="#E02424" style={{ flexShrink: 0 }} />
+      <AlertCircle size={20} color="off-white" style={{ flexShrink: 0 }} />
       <span style={{ flex: 1, fontWeight: '500' }}>{message}</span>
       
       {onClose && (
