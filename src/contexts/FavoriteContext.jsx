@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import api from '../services/api';
 
 const FavoriteContext = createContext();
 
@@ -15,14 +16,9 @@ export function FavoriteProvider({ children }) {
       return;
     }
 
-    fetch('http://localhost:5000/api/favoritos', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    api.get('/favoritos')
       .then((response) => {
-        if (!response.ok) throw new Error('Não foi possível buscar os favoritos.');
-        return response.json();
-      })
-      .then((produtos) => {
+        const produtos = response.data;
         setFavoritos(produtos.map((produto) => ({
           ...produto,
           imagem: produto.imagem || produto.imagem_url,
@@ -33,23 +29,16 @@ export function FavoriteProvider({ children }) {
 
   const toggleFavorito = async (produto) => {
     const token = localStorage.getItem('@CupAndBliss:token');
+    if (!token) {
+      throw new Error('Faça login para adicionar produtos aos favoritos.');
+    }
+
     const existe = favoritos.some((item) => item.id === produto.id);
-    const metodo = existe ? 'DELETE' : 'POST';
-    const url = existe
-      ? `http://localhost:5000/api/favoritos/${produto.id}`
-      : 'http://localhost:5000/api/favoritos';
 
-    const response = await fetch(url, {
-      method: metodo,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        ...(metodo === 'POST' ? { 'Content-Type': 'application/json' } : {}),
-      },
-      ...(metodo === 'POST' ? { body: JSON.stringify({ produto_id: produto.id }) } : {}),
-    });
-
-    if (!response.ok) {
-      throw new Error('Não foi possível atualizar o favorito.');
+    if (existe) {
+      await api.delete(`/favoritos/${produto.id}`);
+    } else {
+      await api.post('/favoritos', { produto_id: produto.id });
     }
 
     setFavoritos((atuais) => {

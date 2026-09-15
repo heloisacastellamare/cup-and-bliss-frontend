@@ -47,14 +47,18 @@ export default function DetalhesProduto({onVoltar, onAdicionarAoCarrinho }) {
     }, 3000);
   };
 
-  const handleToggleFavorito = () => {
+  const handleToggleFavorito = async () => {
     const eraFavorito = ehFavorito;
-    toggleFavorito(item);
-    setNotificacao(
-      eraFavorito
-        ? `${item.nome} removido dos favoritos!`
-        : `${item.nome} adicionado aos favoritos!`
-    );
+    try {
+      await toggleFavorito(item);
+      setNotificacao(
+        eraFavorito
+          ? `${item.nome} removido dos favoritos!`
+          : `${item.nome} adicionado aos favoritos!`
+      );
+    } catch (error) {
+      setNotificacao(error.message);
+    }
     setTimeout(() => {
       setNotificacao(null);
     }, 2500);
