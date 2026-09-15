@@ -48,9 +48,10 @@ export default function DetalhesProduto({onVoltar, onAdicionarAoCarrinho }) {
   };
 
   const handleToggleFavorito = () => {
+    const eraFavorito = ehFavorito;
     toggleFavorito(item);
     setNotificacao(
-      isFavorito
+      eraFavorito
         ? `${item.nome} removido dos favoritos!`
         : `${item.nome} adicionado aos favoritos!`
     );

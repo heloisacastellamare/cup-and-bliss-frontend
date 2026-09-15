@@ -10,7 +10,8 @@ export default function Navbar() {
   const inactiveStyle = `${baseStyle} bg-transparent`
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
+    localStorage.removeItem('@CupAndBliss:token')
+    localStorage.removeItem('@CupAndBliss:user')
     navigate('/login')
   };
 

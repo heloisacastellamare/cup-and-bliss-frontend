@@ -10,7 +10,7 @@ export default function OrdersHistory() {
   const [erro, setErro] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('@CupAndBliss:token');
 
     if (!token) {
       setErro('Faça login para consultar seus pedidos.');
@@ -25,7 +25,7 @@ export default function OrdersHistory() {
         const data = await response.json();
 
         if (response.status === 401) {
-          localStorage.removeItem('token');
+          localStorage.removeItem('@CupAndBliss:token');
           localStorage.removeItem('user');
         }
 

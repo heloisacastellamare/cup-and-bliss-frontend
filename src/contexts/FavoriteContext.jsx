@@ -8,7 +8,7 @@ export function FavoriteProvider({ children }) {
   const location = useLocation();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('@CupAndBliss:token');
 
     if (!token) {
       setFavoritos([]);
@@ -32,7 +32,7 @@ export function FavoriteProvider({ children }) {
   }, [location.pathname]);
 
   const toggleFavorito = async (produto) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('@CupAndBliss:token');
     const existe = favoritos.some((item) => item.id === produto.id);
     const metodo = existe ? 'DELETE' : 'POST';
     const url = existe
