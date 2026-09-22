@@ -1,0 +1,28 @@
+
+> frontend@0.0.0 test
+> vitest run --reporter=verbose src/friendlyErrors.test.js
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.1 [39m[90mC:/cup-and-bliss/frontend[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/friendlyErrors.test.js[2m [ src/friendlyErrors.test.js ][22m
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'config')[39m
+[36m [2m❯[22m src/friendlyErrors.test.js:[2m4:1[22m[39m
+    [90m  2|[39m import { getFriendlyErrorMessage } from './utils/friendlyErrors';
+    [90m  3|[39m
+    [90m  4|[39m describe('Suíte de Testes do Front-end - Cup and Bliss', () => {
+    [90m   |[39m [31m^[39m
+    [90m  5|[39m
+    [90m  6|[39m   it('Deve traduzir erro 401 para mensagem amigável de sessão expirada…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [2mno tests[22m
+[2m   Start at [22m 12:59:53
+[2m   Duration [22m 280ms[2m (worker 97%, environment 3%)[22m
+

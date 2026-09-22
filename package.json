@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "vitest run --reporter=verbose",
+    "test": "jest",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -28,9 +28,9 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
+    "jest": "^30.5.2",
     "postcss": "^8.5.26",
     "tailwindcss": "^4.3.3",
-    "vite": "^8.2.0",
-    "vitest": "^5.0.1"
+    "vite": "^8.2.0"
   }
 }
