@@ -1,43 +1,39 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ShoppingBag, Clock, CheckCircle2 } from 'lucide-react';
-import  NavBar  from '../components/Navbar'
+import NavBar from '../components/Navbar';
+import api from '../services/api';
 
 export default function OrdersHistory() {
   const navigate = useNavigate();
+  const token = localStorage.getItem('@CupAndBliss:token');
   const [pedidos, setPedidos] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(Boolean(token));
+  const [erro, setErro] = useState(token ? '' : 'faça login para ver os seus pedidos');
 
   useEffect(() => {
-    const token = localStorage.getItem('@CupAndBliss:token');
-
     if (!token) {
-      setErro('Faça login para consultar seus pedidos.');
-      setCarregando(false);
       return;
     }
 
-    fetch('http://localhost:5000/api/pedidos', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-
-        if (response.status === 401) {
-          localStorage.removeItem('@CupAndBliss:token');
-          localStorage.removeItem('user');
-        }
-
-        if (!response.ok) {
-          throw new Error(data.detalhes || data.error || 'Não foi possível carregar seus pedidos.');
-        }
-
-        setPedidos(data);
+    api.get('/pedidos')
+      .then((response) => {
+        setPedidos(response.data);
       })
-      .catch((error) => setErro(error.message))
-      .finally(() => setCarregando(false));
-  }, []);
+      .catch((error) => {
+        if (error.response?.status === 401) {
+          localStorage.removeItem('@CupAndBliss:token');
+          localStorage.removeItem('@CupAndBliss:user');
+        }
+
+        setErro(
+          error.response?.data?.detalhes ||
+          error.response?.data?.error ||
+          'Não foi possível carregar seus pedidos.'
+        );
+      })
+        .finally(() => setCarregando(false));
+      }, [token]);
 
   const formatarData = (data) => new Date(data).toLocaleDateString('pt-BR');
   const formatarMoeda = (valor) => Number(valor).toLocaleString('pt-BR', {
